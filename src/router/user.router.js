@@ -7,6 +7,7 @@
  */
 const router = require('koa-router')({ prefix: '/v1/user' })
 const { register } = require('../controller/user.controller')
+const { verifyUser } = require('../middleware/user.middleware')
 
 router.post('/login', async (ctx, next) => {
   //   const result = await login(req.query)
@@ -24,6 +25,6 @@ router.post('/logout', async (ctx, next) => {
   ctx.body = 'users'
 })
 
-router.post('/register', register)
+router.post('/register', verifyUser, register)
 
 module.exports = router

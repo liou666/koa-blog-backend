@@ -3,7 +3,7 @@
  * @Autor: Liou
  * @Date: 2022-03-27 01:07:51
  * @LastEditors: Liou
- * @LastEditTime: 2022-03-27 13:15:05
+ * @LastEditTime: 2022-03-27 17:10:45
  */
 
 const Koa = require('koa')
@@ -14,6 +14,7 @@ const cors = require('koa2-cors')
 const app = new Koa()
 
 const userRouter = require('./src/router/user.router')
+const errorHandler = require('./src/middleware/error-handle')
 
 // middleware
 app.use(async (ctx, next) => {
@@ -41,8 +42,6 @@ app.use(async (ctx, next) => {
 app.use(userRouter.routes(), userRouter.allowedMethods())
 
 // error-handling
-app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
-})
+app.on('error', errorHandler)
 
 module.exports = app
