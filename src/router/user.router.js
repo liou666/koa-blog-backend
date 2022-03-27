@@ -3,11 +3,11 @@
  * @Autor: Liou
  * @Date: 2022-03-27 01:27:49
  * @LastEditors: Liou
- * @LastEditTime: 2022-03-27 12:40:03
+ * @LastEditTime: 2022-03-27 17:54:06
  */
 const router = require('koa-router')({ prefix: '/v1/user' })
 const { register } = require('../controller/user.controller')
-const { verifyUser } = require('../middleware/user.middleware')
+const { verifyUser, handlePassword } = require('../middleware/user.middleware')
 
 router.post('/login', async (ctx, next) => {
   //   const result = await login(req.query)
@@ -25,6 +25,6 @@ router.post('/logout', async (ctx, next) => {
   ctx.body = 'users'
 })
 
-router.post('/register', verifyUser, register)
+router.post('/register', verifyUser, handlePassword, register)
 
 module.exports = router
