@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "dotenv": "^16.0.0",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-json": "^2.0.2",
-    "koa-router": "^10.1.1"
+    "koa-router": "^10.1.1",
+    "koa2-cors": "^2.0.6",
+    "mysql2": "^2.3.3"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
@@ -24,6 +27,7 @@
     "prettier": "^2.6.1"
   },
   "scripts": {
+    "start": "nodemon bin/www.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
