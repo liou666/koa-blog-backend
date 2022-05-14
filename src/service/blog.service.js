@@ -55,6 +55,9 @@ class BlogServer {
         children: [],
       }
       const { label } = cur
+      if (!label) {
+        return pre
+      }
       const curSort = { title: cur.title, id: cur.id, sub_title: cur.sub_title }
       temp.name = label
       temp.children.push(curSort)
