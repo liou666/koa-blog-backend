@@ -17,8 +17,9 @@ class BlogServer {
     }
     sql += ` LIMIT ? OFFSET ?`
     params.push(...[pageSize, (pageNum - 1) * pageSize])
-    const row = await exec(sql, params)
-    return row
+    const blogData = await exec(sql, params)
+    const result = await exec('SELECT COUNT(*) AS total FROM blogs')
+    return { data: blogData, ...result[0] }
   }
 
   async updateBlogList({ blogId, blogData: { title, content } }) {
