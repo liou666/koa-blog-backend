@@ -13,6 +13,7 @@ const {
   createBlog,
   deleteBlog,
   getBlogDetail,
+  getBlogLabels,
 } = require('../controller/blog.controller')
 
 router.get('/list', getBlogList)
@@ -20,5 +21,7 @@ router.put('/list/:blogId/', updateBlogList)
 router.post('/list', createBlog)
 router.delete('/list/:blogId/', deleteBlog)
 router.get('/list/:blogId/', getBlogDetail)
+
+router.get('/label', getBlogLabels)
 
 module.exports = router

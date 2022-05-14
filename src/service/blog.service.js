@@ -8,7 +8,7 @@
 const exec = require('../db/mysql')
 
 class BlogServer {
-  async getBlogList({ title, pageNum = 1, pageSize = 3 }) {
+  async getBlogList({ title, pageNum = 1, pageSize = 10 }) {
     const params = []
     let sql = `SELECT * FROM blogs`
     if (title) {
@@ -27,9 +27,9 @@ class BlogServer {
     return !!row.affectedRows
   }
 
-  async createBlog({ title, author, content }) {
-    const sql = `INSERT INTO blogs (title,content,author) VALUES (?,?,?)`
-    const row = await exec(sql, [title, author, content])
+  async createBlog({ title, author, content, subTitle = null, label = null }) {
+    const sql = `INSERT INTO blogs (title,content,author,sub_title,label) VALUES (?,?,?,?,?)`
+    const row = await exec(sql, [title, author, content, subTitle, label])
     return !!row.affectedRows
   }
 
@@ -43,6 +43,30 @@ class BlogServer {
     const sql = `SELECT * FROM blogs WHERE id= ? `
     const row = await exec(sql, [id])
     return row.length ? row[0] : row
+  }
+
+  async getBlogLabels() {
+    const params = []
+    const sql = `SELECT * FROM blogs`
+    const row = await exec(sql, params)
+    const labels = row.reduce((pre, cur) => {
+      const temp = {
+        name: '',
+        children: [],
+      }
+      const { label } = cur
+      const curSort = { title: cur.title, id: cur.id, sub_title: cur.sub_title }
+      temp.name = label
+      temp.children.push(curSort)
+      const index = pre.findIndex((item) => item.name === label)
+      if (index > -1) {
+        pre[index].children.push(curSort)
+      } else {
+        pre.push(temp)
+      }
+      return pre
+    }, [])
+    return labels
   }
 }
 

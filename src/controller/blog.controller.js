@@ -37,6 +37,11 @@ class BlogController {
     const res = await blogServer.getBlogDetail(ctx.params.blogId)
     ctx.body = new SucceedModel(res)
   }
+
+  async getBlogLabels(ctx) {
+    const res = await blogServer.getBlogLabels()
+    ctx.body = new SucceedModel(res)
+  }
 }
 
 module.exports = new BlogController()
