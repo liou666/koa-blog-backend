@@ -10,27 +10,27 @@ const exec = require('../db/mysql')
 class BlogServer {
   async getBlogList({ title, pageNum = 1, pageSize = 10 }) {
     const params = []
-    let sql = `SELECT * FROM blogs`
+    let sql = `SELECT * FROM blogs `
     if (title) {
       params.push(`%${title}%`)
       sql += ` WHERE title LIKE ? `
     }
-    sql += ` LIMIT ? OFFSET ?`
+    sql += ` ORDER BY create_time DESC LIMIT ? OFFSET ? `
     params.push(...[pageSize, (pageNum - 1) * pageSize])
     const blogData = await exec(sql, params)
     const result = await exec('SELECT COUNT(*) AS total FROM blogs')
     return { data: blogData, ...result[0] }
   }
 
-  async updateBlogList({ blogId, blogData: { title, content } }) {
-    const sql = `UPDATE blogs SET title= ?,content=? where id= ?;`
-    const row = await exec(sql, [title, content, blogId])
+  async updateBlogList({ blogId, blogData: { title, content, author, subTitle, label } }) {
+    const sql = `UPDATE blogs SET title= ?,content=?,author=?,subTitle=?,label=? where id= ?;`
+    const row = await exec(sql, [title, content, author, subTitle, label, blogId])
     return !!row.affectedRows
   }
 
-  async createBlog({ title, author, content, subTitle = null, label = null }) {
+  async createBlog({ title, author = null, content, subTitle = null, label = null }) {
     const sql = `INSERT INTO blogs (title,content,author,sub_title,label) VALUES (?,?,?,?,?)`
-    const row = await exec(sql, [title, author, content, subTitle, label])
+    const row = await exec(sql, [title, content, author, subTitle, label])
     return !!row.affectedRows
   }
 
@@ -72,6 +72,8 @@ class BlogServer {
     }, [])
     return labels
   }
+
+  async uploadBlog() { }
 }
 
 module.exports = new BlogServer()
